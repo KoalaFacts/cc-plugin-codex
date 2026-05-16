@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "cc-plugin-codex",
+  "version": "0.1.0",
+  "description": "Codex CLI plugin that exposes Claude Code (`claude -p`) as delegated skills — plan, implement, execute, review, rescue, setup.",
+  "owner": { "name": "KoalaFacts" },
+  "plugins": [
+    {
+      "name": "cc-plugin-codex",
+      "description": "Delegate plan / implement / execute / review / rescue / setup to Claude Code from inside Codex.",
+      "version": "0.1.0",
+      "source": ".",
+      "category": "productivity"
+    }
+  ]
+}

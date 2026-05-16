@@ -38,7 +38,8 @@ $root = (Resolve-Path "$PSScriptRoot/..").Path
 Push-Location $root
 try {
   Section "Static layout"
-  Assert-True (Test-Path ".codex-plugin/plugin.json")     "manifest exists"
+  Assert-True (Test-Path ".claude-plugin/marketplace.json") "marketplace manifest exists"
+  Assert-True (Test-Path ".codex-plugin/plugin.json")     "plugin manifest exists"
   Assert-True (Test-Path "skills/claude-setup/SKILL.md")    "skill: claude-setup"
   Assert-True (Test-Path "skills/claude-plan/SKILL.md")     "skill: claude-plan"
   Assert-True (Test-Path "skills/claude-implement/SKILL.md") "skill: claude-implement"
@@ -54,14 +55,22 @@ try {
   Assert-True (Test-Path ".mcp.json")     ".mcp.json exists"
   Assert-True (Test-Path "README.md")     "README.md exists"
 
-  Section "Manifest parses"
+  Section "Manifests parse"
   try {
-    $manifest = Get-Content ".codex-plugin/plugin.json" -Raw | ConvertFrom-Json
-    Assert-True ($manifest.name -eq "cc-plugin-codex") "manifest name == cc-plugin-codex"
-    Assert-True ($null -ne $manifest.version)         "manifest has version"
-    Assert-True ($manifest.skills -eq "./skills/")    "manifest skills points to ./skills/"
+    $plugin = Get-Content ".codex-plugin/plugin.json" -Raw | ConvertFrom-Json
+    Assert-True ($plugin.name -eq "cc-plugin-codex")    "plugin manifest name == cc-plugin-codex"
+    Assert-True ($null -ne $plugin.version)             "plugin manifest has version"
+    Assert-True ($plugin.skills -eq "./skills/")        "plugin manifest skills points to ./skills/"
   } catch {
-    Assert-True $false "manifest JSON parse: $($_.Exception.Message)"
+    Assert-True $false "plugin manifest JSON parse: $($_.Exception.Message)"
+  }
+  try {
+    $market = Get-Content ".claude-plugin/marketplace.json" -Raw | ConvertFrom-Json
+    Assert-True ($market.name -eq "cc-plugin-codex")    "marketplace name == cc-plugin-codex"
+    Assert-True ($market.plugins.Count -ge 1)           "marketplace has at least one plugin"
+    Assert-True ($market.plugins[0].source -eq ".")     "marketplace plugin source == ."
+  } catch {
+    Assert-True $false "marketplace manifest JSON parse: $($_.Exception.Message)"
   }
 
   Section "Skill frontmatter"
