@@ -16,19 +16,31 @@ inside Codex.
 
 ## Install
 
-```text
-codex
-/plugin marketplace add KoalaFacts/cc-plugin-codex
-/plugin install cc-plugin-codex@KoalaFacts
-/reload-plugins
+In your shell (not inside a Codex session):
+
+```bash
+# 1. Add this repo as a Codex marketplace.
+codex plugin marketplace add KoalaFacts/cc-plugin-codex
+
+# 2. Install the plugin from that marketplace.
+codex plugin add cc-plugin-codex@cc-plugin-codex
 ```
 
-Then run `/claude:setup` to verify your `claude` CLI is installed,
-authenticated, and healthy.
+Then inside Codex:
+
+```text
+/plugins         # confirm cc-plugin-codex is installed and enabled
+```
+
+Run `/claude:setup` (or `$claude-setup`) to verify your `claude` CLI is
+installed, authenticated, and healthy.
 
 ### Prerequisites
 
-- [Codex CLI](https://github.com/openai/codex) with plugin support.
+- [Codex CLI](https://github.com/openai/codex) **v0.131 or newer** —
+  earlier builds don't have the `codex plugin` subcommand. Check with
+  `codex --version`; update with `npm i -g @openai/codex@latest` or your
+  installer's equivalent.
 - [Claude Code CLI](https://docs.claude.com/en/docs/claude-code/quickstart)
   on `PATH`, authenticated. Install:
   - macOS / Linux: `npm i -g @anthropic-ai/claude-code`
@@ -82,7 +94,8 @@ only if you have a specific reason.
 
 ```text
 cc-plugin-codex/
-├── .codex-plugin/plugin.json         # manifest
+├── .claude-plugin/marketplace.json   # marketplace manifest (single-plugin registry)
+├── .codex-plugin/plugin.json         # plugin manifest
 ├── skills/                            # six SKILL.md files
 │   ├── claude-setup/
 │   ├── claude-plan/
