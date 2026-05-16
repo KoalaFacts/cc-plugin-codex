@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "claude-code": {
+      "command": "claude",
+      "args": ["mcp", "serve"],
+      "description": "Optional MCP fallback — exposes Claude Code's Read/Write/Edit/Grep/Glob/LS/Bash to Codex over MCP. Only enable if you want per-tool access; the cc-plugin-codex skills already cover the common case via `claude -p` and are usually preferable.",
+      "env": {}
+    }
+  }
+}
