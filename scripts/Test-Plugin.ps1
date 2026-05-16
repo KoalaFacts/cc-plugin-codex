@@ -37,27 +37,29 @@ function Section {
 $root = (Resolve-Path "$PSScriptRoot/..").Path
 Push-Location $root
 try {
+  $pluginDir = "plugins/cc-plugin-codex"
+
   Section "Static layout"
-  Assert-True (Test-Path ".claude-plugin/marketplace.json") "marketplace manifest exists"
-  Assert-True (Test-Path ".codex-plugin/plugin.json")     "plugin manifest exists"
-  Assert-True (Test-Path "skills/claude-setup/SKILL.md")    "skill: claude-setup"
-  Assert-True (Test-Path "skills/claude-plan/SKILL.md")     "skill: claude-plan"
-  Assert-True (Test-Path "skills/claude-implement/SKILL.md") "skill: claude-implement"
-  Assert-True (Test-Path "skills/claude-execute/SKILL.md")   "skill: claude-execute"
-  Assert-True (Test-Path "skills/claude-review/SKILL.md")    "skill: claude-review"
-  Assert-True (Test-Path "skills/claude-rescue/SKILL.md")    "skill: claude-rescue"
+  Assert-True (Test-Path ".claude-plugin/marketplace.json")                    "marketplace manifest exists"
+  Assert-True (Test-Path "$pluginDir/.codex-plugin/plugin.json")               "plugin manifest exists"
+  Assert-True (Test-Path "$pluginDir/skills/claude-setup/SKILL.md")            "skill: claude-setup"
+  Assert-True (Test-Path "$pluginDir/skills/claude-plan/SKILL.md")             "skill: claude-plan"
+  Assert-True (Test-Path "$pluginDir/skills/claude-implement/SKILL.md")        "skill: claude-implement"
+  Assert-True (Test-Path "$pluginDir/skills/claude-execute/SKILL.md")          "skill: claude-execute"
+  Assert-True (Test-Path "$pluginDir/skills/claude-review/SKILL.md")           "skill: claude-review"
+  Assert-True (Test-Path "$pluginDir/skills/claude-rescue/SKILL.md")           "skill: claude-rescue"
   foreach ($p in @('default','evil','security','perf','api-design')) {
-    Assert-True (Test-Path "personas/$p.md") "persona: $p"
+    Assert-True (Test-Path "$pluginDir/personas/$p.md") "persona: $p"
   }
   foreach ($s in @('planner','implementer','executor')) {
-    Assert-True (Test-Path "system-prompts/$s.md") "system-prompt: $s"
+    Assert-True (Test-Path "$pluginDir/system-prompts/$s.md") "system-prompt: $s"
   }
-  Assert-True (Test-Path ".mcp.json")     ".mcp.json exists"
-  Assert-True (Test-Path "README.md")     "README.md exists"
+  Assert-True (Test-Path "$pluginDir/.mcp.json") ".mcp.json exists"
+  Assert-True (Test-Path "README.md")            "README.md exists"
 
   Section "Manifests parse"
   try {
-    $plugin = Get-Content ".codex-plugin/plugin.json" -Raw | ConvertFrom-Json
+    $plugin = Get-Content "$pluginDir/.codex-plugin/plugin.json" -Raw | ConvertFrom-Json
     Assert-True ($plugin.name -eq "cc-plugin-codex")    "plugin manifest name == cc-plugin-codex"
     Assert-True ($null -ne $plugin.version)             "plugin manifest has version"
     Assert-True ($plugin.skills -eq "./skills/")        "plugin manifest skills points to ./skills/"
@@ -66,15 +68,15 @@ try {
   }
   try {
     $market = Get-Content ".claude-plugin/marketplace.json" -Raw | ConvertFrom-Json
-    Assert-True ($market.name -eq "cc-plugin-codex")    "marketplace name == cc-plugin-codex"
-    Assert-True ($market.plugins.Count -ge 1)           "marketplace has at least one plugin"
-    Assert-True ($market.plugins[0].source -eq ".")     "marketplace plugin source == ."
+    Assert-True ($market.name -eq "cc-plugin-codex")                            "marketplace name == cc-plugin-codex"
+    Assert-True ($market.plugins.Count -ge 1)                                   "marketplace has at least one plugin"
+    Assert-True ($market.plugins[0].source -eq "./plugins/cc-plugin-codex")     "marketplace plugin source == ./plugins/cc-plugin-codex"
   } catch {
     Assert-True $false "marketplace manifest JSON parse: $($_.Exception.Message)"
   }
 
   Section "Skill frontmatter"
-  Get-ChildItem -Path skills -Recurse -Filter SKILL.md | ForEach-Object {
+  Get-ChildItem -Path "$pluginDir/skills" -Recurse -Filter SKILL.md | ForEach-Object {
     $first = Get-Content $_.FullName -TotalCount 8 -Raw
     Assert-True ($first.StartsWith("---")) "$($_.FullName) starts with frontmatter"
     Assert-True ($first -match "(?m)^name:\s*\S+") "$($_.FullName) has name"

@@ -94,30 +94,36 @@ only if you have a specific reason.
 
 ```text
 cc-plugin-codex/
-├── .claude-plugin/marketplace.json   # marketplace manifest (single-plugin registry)
-├── .codex-plugin/plugin.json         # plugin manifest
-├── skills/                            # six SKILL.md files
-│   ├── claude-setup/
-│   ├── claude-plan/
-│   ├── claude-implement/
-│   ├── claude-execute/
-│   ├── claude-review/
-│   └── claude-rescue/
-├── personas/                          # reviewer system prompts
-│   ├── default.md
-│   ├── evil.md
-│   ├── security.md
-│   ├── perf.md
-│   └── api-design.md
-├── system-prompts/                    # appended for plan / implement / execute
-│   ├── planner.md
-│   ├── implementer.md
-│   └── executor.md
-├── .mcp.json                          # optional MCP fallback
-├── scripts/Test-Plugin.ps1            # smoke test
-├── PLAN.md                            # design plan
+├── .claude-plugin/marketplace.json       # marketplace manifest at repo root
+├── plugins/
+│   └── cc-plugin-codex/                  # the plugin lives in a subdir
+│       ├── .codex-plugin/plugin.json     # plugin manifest
+│       ├── skills/                       # six SKILL.md files
+│       │   ├── claude-setup/
+│       │   ├── claude-plan/
+│       │   ├── claude-implement/
+│       │   ├── claude-execute/
+│       │   ├── claude-review/
+│       │   └── claude-rescue/
+│       ├── personas/                     # reviewer system prompts
+│       │   ├── default.md
+│       │   ├── evil.md
+│       │   ├── security.md
+│       │   ├── perf.md
+│       │   └── api-design.md
+│       ├── system-prompts/               # appended for plan / implement / execute
+│       │   ├── planner.md
+│       │   ├── implementer.md
+│       │   └── executor.md
+│       └── .mcp.json                     # optional MCP fallback
+├── scripts/Test-Plugin.ps1               # smoke test
+├── PLAN.md                               # design plan
 └── README.md
 ```
+
+The marketplace manifest at the root references the plugin via
+`source: "./plugins/cc-plugin-codex"`, matching the layout pattern
+`anthropics/claude-plugins-official` uses (plugins always in subdirs).
 
 ## Smoke test
 

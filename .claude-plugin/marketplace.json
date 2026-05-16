@@ -9,7 +9,7 @@
       "name": "cc-plugin-codex",
       "description": "Delegate plan / implement / execute / review / rescue / setup to Claude Code from inside Codex.",
       "version": "0.1.0",
-      "source": ".",
+      "source": "./plugins/cc-plugin-codex",
       "category": "productivity"
     }
   ]
