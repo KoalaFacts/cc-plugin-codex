@@ -1,0 +1,26 @@
+{
+  "name": "cc-plugin-codex",
+  "version": "0.1.0",
+  "description": "Expose Claude Code (`claude -p`) as a set of delegated skills inside Codex CLI — plan, implement, execute, review, rescue, and setup.",
+  "author": "KoalaFacts",
+  "license": "MIT",
+  "homepage": "https://github.com/KoalaFacts/cc-plugin-codex",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KoalaFacts/cc-plugin-codex.git"
+  },
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Claude Code (via cc-plugin-codex)",
+    "shortDescription": "Delegate planning, implementation, review, and rescue to Claude Code from inside Codex.",
+    "category": "Productivity",
+    "capabilities": ["Read", "Write", "Shell"],
+    "defaultPrompts": [
+      "ask claude to plan: add a --no-cache flag",
+      "ask claude to review my current diff",
+      "ask claude to review --evil --base origin/main",
+      "ask claude to rescue this task — you're stuck, hand it over"
+    ]
+  }
+}
