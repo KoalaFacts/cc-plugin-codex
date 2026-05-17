@@ -108,7 +108,8 @@ try {
 
         $prompt = "Reply with a one-paragraph review of the diff between HEAD~1 and HEAD."
         $diff   = git diff --no-color HEAD~1...HEAD
-        $full   = "$prompt`n`n```diff`n$diff`n```"
+        $fence  = '```'
+        $full   = "$prompt`n`n${fence}diff`n$diff`n$fence"
 
         $tmpPrompt = Join-Path $tmp "prompt.txt"
         Set-Content -Path $tmpPrompt -Value $full
