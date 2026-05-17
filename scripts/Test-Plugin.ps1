@@ -77,7 +77,7 @@ try {
 
   Section "Skill frontmatter"
   Get-ChildItem -Path "$pluginDir/skills" -Recurse -Filter SKILL.md | ForEach-Object {
-    $first = Get-Content $_.FullName -TotalCount 8 -Raw
+    $first = (Get-Content $_.FullName -TotalCount 8) -join "`n"
     Assert-True ($first.StartsWith("---")) "$($_.FullName) starts with frontmatter"
     Assert-True ($first -match "(?m)^name:\s*\S+") "$($_.FullName) has name"
     Assert-True ($first -match "(?m)^description:\s*\S+") "$($_.FullName) has description"
