@@ -35,6 +35,10 @@ function Section {
 }
 
 $root = (Resolve-Path "$PSScriptRoot/..").Path
+Write-Host "PSVersion: $($PSVersionTable.PSVersion)" -ForegroundColor DarkGray
+Write-Host "Platform : $($PSVersionTable.Platform)"  -ForegroundColor DarkGray
+Write-Host "Root     : $root"                        -ForegroundColor DarkGray
+
 Push-Location $root
 try {
   $pluginDir = "plugins/cc-plugin-codex"
@@ -77,7 +81,7 @@ try {
 
   Section "Skill frontmatter"
   Get-ChildItem -Path "$pluginDir/skills" -Recurse -Filter SKILL.md | ForEach-Object {
-    $first = Get-Content $_.FullName -TotalCount 8 -Raw
+    $first = (Get-Content $_.FullName -TotalCount 8) -join "`n"
     Assert-True ($first.StartsWith("---")) "$($_.FullName) starts with frontmatter"
     Assert-True ($first -match "(?m)^name:\s*\S+") "$($_.FullName) has name"
     Assert-True ($first -match "(?m)^description:\s*\S+") "$($_.FullName) has description"
@@ -104,7 +108,8 @@ try {
 
         $prompt = "Reply with a one-paragraph review of the diff between HEAD~1 and HEAD."
         $diff   = git diff --no-color HEAD~1...HEAD
-        $full   = "$prompt`n`n```diff`n$diff`n```"
+        $fence  = '```'
+        $full   = "$prompt`n`n${fence}diff`n$diff`n$fence"
 
         $tmpPrompt = Join-Path $tmp "prompt.txt"
         Set-Content -Path $tmpPrompt -Value $full
@@ -136,6 +141,14 @@ try {
     Write-Host "All checks passed." -ForegroundColor Green
     exit 0
   }
+} catch {
+  Write-Host ""
+  Write-Host "UNHANDLED EXCEPTION:" -ForegroundColor Red
+  Write-Host $_.Exception.GetType().FullName
+  Write-Host $_.Exception.Message
+  Write-Host $_.InvocationInfo.PositionMessage
+  Write-Host $_.ScriptStackTrace
+  exit 1
 } finally {
   Pop-Location
 }
