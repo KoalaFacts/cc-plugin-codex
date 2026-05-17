@@ -35,6 +35,10 @@ function Section {
 }
 
 $root = (Resolve-Path "$PSScriptRoot/..").Path
+Write-Host "PSVersion: $($PSVersionTable.PSVersion)" -ForegroundColor DarkGray
+Write-Host "Platform : $($PSVersionTable.Platform)"  -ForegroundColor DarkGray
+Write-Host "Root     : $root"                        -ForegroundColor DarkGray
+
 Push-Location $root
 try {
   $pluginDir = "plugins/cc-plugin-codex"
@@ -136,6 +140,14 @@ try {
     Write-Host "All checks passed." -ForegroundColor Green
     exit 0
   }
+} catch {
+  Write-Host ""
+  Write-Host "UNHANDLED EXCEPTION:" -ForegroundColor Red
+  Write-Host $_.Exception.GetType().FullName
+  Write-Host $_.Exception.Message
+  Write-Host $_.InvocationInfo.PositionMessage
+  Write-Host $_.ScriptStackTrace
+  exit 1
 } finally {
   Pop-Location
 }
