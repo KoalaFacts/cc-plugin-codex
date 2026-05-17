@@ -19,32 +19,54 @@ inside Codex.
 In your shell (not inside a Codex session):
 
 ```bash
-# 1. Add this repo as a Codex marketplace.
 codex plugin marketplace add KoalaFacts/cc-plugin-codex
-
-# 2. Install the plugin from that marketplace.
-codex plugin add cc-plugin-codex@cc-plugin-codex
 ```
 
-Then inside Codex:
+That registers this repo as a Codex marketplace. Then open Codex and
+install the plugin via the TUI:
+
+```bash
+codex
+```
 
 ```text
-/plugins         # confirm cc-plugin-codex is installed and enabled
+/plugins              # opens the plugin browser
+                      # find cc-plugin-codex → Install → Space to enable
 ```
 
-Run `/claude:setup` (or `$claude-setup`) to verify your `claude` CLI is
-installed, authenticated, and healthy.
+Run `$claude-setup` (or "ask claude to set up") to verify your `claude`
+CLI is installed, authenticated, and healthy.
 
 ### Prerequisites
 
-- [Codex CLI](https://github.com/openai/codex) **v0.131 or newer** —
-  earlier builds don't have the `codex plugin` subcommand. Check with
-  `codex --version`; update with `npm i -g @openai/codex@latest` or your
-  installer's equivalent.
+- [Codex CLI](https://github.com/openai/codex) with the `plugin`
+  subcommand — verify by running `codex plugin --help`. If the
+  subcommand is missing, update Codex via your installer
+  (`npm i -g @openai/codex@latest`, `brew upgrade codex`, etc.). See the
+  [Codex plugins docs](https://developers.openai.com/codex/plugins/build)
+  for the canonical reference.
 - [Claude Code CLI](https://docs.claude.com/en/docs/claude-code/quickstart)
   on `PATH`, authenticated. Install:
   - macOS / Linux: `npm i -g @anthropic-ai/claude-code`
   - Windows: `irm https://claude.ai/install.ps1 | iex`
+
+### Troubleshooting
+
+**`/plugins` doesn't show `cc-plugin-codex`?** The marketplace snapshot
+might be stale. Refresh it:
+
+```bash
+codex plugin marketplace upgrade cc-plugin-codex
+```
+
+If that doesn't help, remove and re-add:
+
+```bash
+codex plugin marketplace remove cc-plugin-codex
+codex plugin marketplace add KoalaFacts/cc-plugin-codex
+```
+
+Reopen Codex and check `/plugins` again.
 
 ## Skills
 
